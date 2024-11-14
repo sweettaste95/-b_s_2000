@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بطولات نادي الهلال السعودي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json"> <!-- رابط manifest.json -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 
 </head>
@@ -18,46 +22,127 @@
                 <img src="icon.png" alt="شعار التطبيق" id="logo">
             </div>
         </div>
+      
+     <div id="overlay" class="hidden"></div>
+<div id="register-screen" class="popup">
+    <h2>أهلاً بك أيها الزعيم</h2>
+    <input type="text" id="user-name" placeholder="الاسم" required>
+    <input type="email" id="user-email" placeholder="البريد الإلكتروني" required>
+    <button class="icon-btn" onclick="registerUser()">تسجيل</button>
+</div>
 
-        <!-- الأزرار الرئيسية -->
-        <div class="buttons">
-            <button class="icon-btn" onclick="showYearSearch()">🔍 بحث حسب العام</button>
-            <button class="icon-btn" onclick="showCompetitionSearch()">⭐ بحث حسب المسابقة</button>
-        </div>
+<!-- شاشة التطبيق الرئيسية (تحتوي على الأزرار وغيرها) -->
+  
+    <!-- الأزرار الرئيسية -->
+<div id="main-buttons" class="buttons hidden">
+    <button class="icon-btn" onclick="showCompetitionSearch()">⭐ بحث حسب المسابقة</button>
+    <button class="icon-btn" onclick="showTimeline()">🏆 التتويجات</button>
+    <button class="icon-btn" onclick="showMatches()">📅 مباريات الهلال</button>
+    <button class="icon-btn" onclick="showYouTubeVideos()">📹 مقاطع التتويج</button>
+      <button class="icon-btn" onclick="showPresidentSlider()">👥 رؤساء الهلال</button>
 
-        <!-- البحث حسب العام -->
-        <div id="year-search" class="search-section hidden">
-            <div class="search-row">
-                <label for="year-input">اختر السنة</label>
-                <input type="number" id="year-input" placeholder="مثال: 2022">
-                <button class="search-btn" onclick="searchByYear()">بحث</button>
-            </div>
-            <div id="year-results" class="results"></div>
-        </div>
+</div>
+
+      
+<!-- سلايدر الرؤساء -->
+<div id="president-slider-container" class="swiper-container hidden">
+    <div id="president-slider" class="swiper-wrapper"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
+     
 
         <!-- البحث حسب المسابقة -->
         <div id="competition-search" class="search-section hidden">
-            <label for="competition-select">اختر المسابقة</label>
-            <select id="competition-select">
+           
+            <select id="competition-select" onchange="searchByCompetition()">>
                 <option value="">اختر المسابقة</option>
             </select>
-            <button class="search-btn" onclick="searchByCompetition()">بحث</button>
+           
             <div id="competition-results" class="results"></div>
         </div>
 
+        <!-- قسم التتويجات مع قائمة منسدلة -->
+        <div class="timeline-container hidden">
+         
+            <select id="year-select" onchange="showChampionshipDetails(this.value)">
+                <option value="">  اختـــر سنـــة التتويــج</option>
+            </select>
+            <div id="championship-details" class="hidden">
+              
+                <!-- تفاصيل البطولات ستظهر هنا -->
+              </div>
+        
+        </div>
+
+
+       <!-- قسم تفاصيل البطولة -->
+<div id="championship-info" class="hidden">
+    <h3 class="info-title">دوري أبطال آسيا</h3>
+    <p><strong>المباراة النهائية:</strong> الهلال ضد أوراوا</p>
+    <p><strong>الموسم:</strong> 2018-2019</p>
+    <p><strong>النتيجة:</strong> 3-0 (مجموع المباراتين)</p>
+    <button class="back-btn" onclick="backToList()">العودة إلى قائمة البطولات</button>
+</div>
+       <!-- قسم جدول مباريات الهلال القادمة -->
+<div id="matches-schedule" class="hidden">
+    <h2>جدول مباريات الهلال 2024-2025</h2>
+    <table id="matches-table">
+        <thead>
+            <tr>
+                <th>التاريخ</th>
+                <th>الفريق المنافس</th>
+                <th>المسابقة</th>
+                <th>الموقع</th>
+            </tr>
+        </thead>
+        <tbody id="matches-tbody">
+            <!-- سيتم إدراج المباريات هنا عند عرض القسم -->
+        </tbody>
+    </table>
+    <button class="back-btn" onclick="resetView()">العودة إلى القائمة الرئيسية</button>
+</div>
+
+
+        <!-- قسم مقاطع يوتيوب -->
+        <div id="youtube-videos"><</div>
+           
         <!-- رسالة عند عدم العثور على نتائج -->
         <div id="no-results" class="no-results hidden">عفواً أيها الزعيم، لا توجد بطولة في هذا العام</div>
 
-        <!-- زر إعادة البحث -->
-        <button class="reset-btn" onclick="resetSearch()">إعادة البحث</button>
+     
+<div class="container">
+    <!-- المحتوى الأساسي للتطبيق، مثل الأزرار والعنوان -->
 
-        <!-- حقوق الطبع والنشر -->
-        <footer>
-            <p>© جميع الحقوق محفوظة لحساب حالي الذوق 2024 - الإصدار الأول</p>
-            <p class="handle">@B_S_2000</p>
-        </footer>
+    <!-- زر "من نحن" -->
+    <button class="about-button" onclick="showAboutCard()">من نحن</button>
+
+    <!-- روابط السوشيال ميديا -->
+    <div class="social-links">
+        <a href="https://x.com/B_S_2000" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="https://www.youtube.com/channel/UC3YNG_VDR80fXDkyKssV3-Q/join" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
     </div>
+  
+  
+  
+ <!-- البطاقة التعريفية -->
+<div id="about-card" class="about-card hidden">
+    <span class="close-btn" onclick="closeAboutCard()">×</span>
+    <h2>مرحبــاً يا زعمـــاء</h2>
+    <p>أنا أخوكم الهلالي الملقب بـ **حالي الذوق** صممت هذا التطبيق خصيصًا لعشاق الزعيم نادي الهلال و يجمع كل ما يهم الجمهور من معلومات و بطولات وأحداث تهمكم أتمنى أن ينال إعجابكم ويكون مصدر فخر لكل هلالي زعيمنا يستحق الأفضل دائمًا</p>
+    
+    <h3>لدعم والتواصل </h3>
+  
+   </div>
+  
+  
+  
+  
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <!-- نص الحقوق -->
+    <div class="footer-text">
+        <p>© جميع الحقوق محفوظة لحساب حالي الذوق 2024 - الإصدار الأول</p>
+            <p class="handle">@B_S_2000</p>
+    </div>
+</div>
+
