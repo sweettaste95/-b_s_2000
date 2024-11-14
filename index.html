@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطولات نادي الهلال السعودي</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json"> <!-- رابط manifest.json -->
+</head>
+<body>
+    <div class="container">
+        <!-- حاوية العنوان والشعار -->
+        <div class="header">
+            <h1 id="main-title">بطولات نادي الهلال السعودي</h1>
+            <div id="logo-container">
+                <img src="icon.png" alt="شعار التطبيق" id="logo">
+            </div>
+        </div>
+        <!-- الأزرار الرئيسية -->
+        <div class="buttons">
+            <button class="icon-btn" onclick="showYearSearch()">🔍 بحث حسب العام</button>
+            <button class="icon-btn" onclick="showCompetitionSearch()">⭐ بحث حسب المسابقة</button>
+        </div>
+        <!-- البحث حسب العام -->
+        <div id="year-search" class="search-section hidden">
+            <div class="search-row">
+                <label for="year-input">اختر السنة</label>
+                <input type="number" id="year-input" placeholder="مثال: 2022">
+                <button class="search-btn" onclick="searchByYear()">بحث</button>
+            </div>
+            <div id="year-results" class="results"></div>
+        </div>
+        <!-- البحث حسب المسابقة -->
+        <div id="competition-search" class="search-section hidden">
+            <label for="competition-select">اختر المسابقة</label>
+            <select id="competition-select">
+                <option value="">اختر المسابقة</option>
+            </select>
+            <button class="search-btn" onclick="searchByCompetition()">بحث</button>
+            <div id="competition-results" class="results"></div>
+        </div>
+        <!-- رسالة عند عدم العثور على نتائج -->
+        <div id="no-results" class="no-results hidden">عفواً أيها الزعيم، لا توجد بطولة في هذا العام</div>
+        <!-- زر إعادة البحث -->
+        <button class="reset-btn" onclick="resetSearch()">إعادة البحث</button>
+        <!-- حقوق الطبع والنشر -->
+        <footer>
+            <p>© جميع الحقوق محفوظة لحساب حالي الذوق 2024 - الإصدار الأول</p>
+            <p class="handle">@B_S_2000</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
